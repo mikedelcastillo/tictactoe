@@ -1,0 +1,125 @@
+<!doctype html>
+<html>
+<head>
+<title>Tic Tac Toe</title>
+</head>
+<body>
+
+<div id="game">
+  <div id="title">Tic-Tac-Toe</div>
+  <div id="tiles"></div>
+</div>
+
+<style>
+body,html{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  font-family: sans-serif;
+}
+
+*{
+  box-sizing: border-box;
+}
+
+#game{
+  text-align: center;
+  padding: 2em;
+}
+
+#tiles{
+  display: flex;
+  flex-wrap: wrap;
+
+}
+
+#tiles div{
+  padding: 2em;
+  background: #CCC;
+  width: 33.3333%;
+  border: 1px solid;
+}
+
+.red{
+  background-color: red;
+}
+
+.blue{
+  border: 5px blue dotted;
+}
+
+</style>
+
+<script>
+let tilesElem = document.querySelector("#tiles");
+
+let turns = 0;
+let tiles = [];
+
+let tests = [
+  [0,1,2], // 1st row
+  [3,4,5], // 2nd row
+  [6,7,8], // 3rd row
+  [0,4,8], // back slash
+  [2,4,6], // forward slash
+  [0,3,6], // 1st column
+  [1,4,7], // 2nd column
+  [2,5,8]  // 3rd column
+];
+
+let symbols = ["X", "O"];
+
+for(let i = 0; i < 9; i++){
+  let elem = document.createElement("div");
+  tilesElem.appendChild(elem);
+  elem.addEventListener("click", e => selectTile(i), false);
+  tiles.push({
+    value: -1,
+    elem
+  });
+}
+
+function update(){
+  for(let i = 0; i < tiles.length; i++){
+    let tile = tiles[i];
+    tile.elem.innerHTML = tile.value == -1 ? "-" : symbols[tile.value];
+  }
+
+  for(let i = 0; i < tests.length; i++){
+    let test = tests[i];
+    let a = tiles[test[0]];
+    let b = tiles[test[1]];
+    let c = tiles[test[2]];
+
+    let win = a.value == b.value && b.value == c.value && a.value != -1;
+
+    if(win){
+      alert(`Congrats! ${symbols[a.value]} won!`);
+      break;
+    }
+
+    if(turns >= 7 && !win){
+      alert("It's a draw!");
+      break;
+    }
+  }
+}
+
+function selectTile(index){
+  let tile = tiles[index];
+  if(tile.value == -1){
+    tile.value = turns % 2;
+    update();
+    turns++;
+  }
+}
+
+update();
+
+</script>
+
+</body>
+</html>
